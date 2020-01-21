@@ -140,6 +140,6 @@ virtualenv-clone==0.5.3
 wasabi==0.2.2
 wcwidth==0.1.7
 webencodings==0.5.1
-Werkzeug==0.12.2
+Werkzeug==0.15.3
 widgetsnbextension==3.5.0
 wrapt==1.11.2
