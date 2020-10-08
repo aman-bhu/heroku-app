@@ -3,42 +3,56 @@ using namespace std;
 #define int long long int
 
 signed main(){
-    int t = 1; cin >> t;
+    int t = 1; //cin >> t;
     while(t--){
-        int n,m; cin >> n >> m;
-        int a[n][m];
+        int n; cin >> n;
+        vector<int> a(n);
+        for(auto &x:a)
+            cin >> x;
+        vector<int> mark;
+        int max_col = -1,mn = 1e18, ind;
         for(int i = 0; i < n; i++)
-            for(int j = 0; j < m; j++)
-                cin >> a[i][j];
-        int ans = 0;
-        for(int i = 0; i < (n+1)/2; i++)
-            for(int j = 0; j < (m+1)/2; j++)
+        {
+            if(a[i] > max_col)
             {
-                map<pair<int,int>,bool> mp;
-                vector<int> num;
-                mp[{i,j}] = 1;
-                num.push_back(a[i][j]);
-                if(mp[{n-1-i,j}] == 0)
-                {
-                    mp[{n-1-i,j}] = 1;
-                    num.push_back(a[n-1-i][j]);
-                }
-                if(mp[{i,m-1-j}] == 0)
-                {
-                    mp[{i,m-1-j}] = 1;
-                    num.push_back(a[i][m-1-j]);
-                }
-                if(mp[{n-1-i,m-1-j}] == 0)
-                {
-                    mp[{n-1-i,m-1-j}] = 1;
-                    num.push_back(a[n-1-i][m-1-j]);
-                }
-                sort(num.begin(),num.end());
-                int idx = num.size() - 1;
-                idx /= 2;
-                for(auto x:num)
-                    ans += abs(x - num[idx]);
+                mark.push_back(i);
+                max_col = a[i];
             }
-        cout << ans << endl;
+            else
+            {   
+                if(mn > a[i])
+                {
+                    mn = a[i];
+                    ind = i;
+                }
+            }
+        }
+        int ans, mx = -1;
+        if(mn != 1e18)
+        {
+            mx = mark.size();
+            ans = ind;
+        }
+        mark.push_back(n);
+        for(int i = 0; i < mark.size()-1; i++)
+        {
+            int j = mark[i];
+            int k = mark[i+1];
+            max_col = (i == 0 ? -1 : a[mark[i-1]]);
+            int cnt = 0;
+            for(int l = j+1; l < k; l++)
+                if(a[l] > max_col)
+                {
+                    cnt++;
+                    max_col = a[l];
+                }
+            int here = mark.size() - 2 + cnt;
+            if(mx < here)
+            {
+                mx = here;
+                ans = j;
+            }
+        }
+        cout << a[ans];
     }    
 }
